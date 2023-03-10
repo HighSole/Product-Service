@@ -1,5 +1,5 @@
-const Product = require("../models/Product");
-const ProductVariant = require("../models/ProductVariant");
+const Product = require("../models/productModel");
+const ProductVariant = require("../models/productVariantModel");
 
 // GET all products
 const getProducts = async (req, res) => {

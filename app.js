@@ -4,12 +4,13 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
+require("dotenv").config();
+
 const app = express();
 const connectDB = require("./config/database");
 
-connectDB();
 
-require("dotenv").config();
+connectDB();
 
 // Middleware
 app.use(bodyParser.json());

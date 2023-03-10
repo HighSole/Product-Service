@@ -1,4 +1,4 @@
-const ProductVariant = require("../models/productVariant");
+const ProductVariant = require("../models/productVariantModel");
 
 // GET variants with productId (size optional)
 const getProductVariant = async (req, res, next) => {
