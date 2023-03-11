@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require('mongoose-type-url');
 
 const productSchema = new mongoose.Schema(
   {
@@ -18,8 +19,16 @@ const productSchema = new mongoose.Schema(
       enum: ["Men", "Women", "Youth", "Infants"],
       default: "Men",
     },
-    imageLinks: {
-      type: [mongoose.SchemaTypes.Url],
+    image: {
+      thumbnail: {
+        type: mongoose.SchemaTypes.Url,
+      },
+      original: {
+        type: mongoose.SchemaTypes.Url,
+      },
+      small: {
+        type: mongoose.SchemaTypes.Url,
+      },
     },
     description: {
       type: String,

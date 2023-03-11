@@ -1,9 +1,11 @@
 const Product = require("../models/productModel");
 const ProductVariant = require("../models/productVariantModel");
+const axios = require("axios");
 
 // GET all products
 const getProducts = async (req, res) => {
   try {
+    console.log('in products')
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
@@ -34,6 +36,29 @@ const getProductByURL = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
+  }
+};
+
+const findProduct = async (req, res) => {
+  const options = {
+    method: 'GET',
+    url: 'https://the-sneaker-database.p.rapidapi.com/sneakers',
+    params: {limit: '10', name: req.query.name},
+    headers: {
+      'X-RapidAPI-Key': '0e67804651mshd941b83edfc4d32p1620b2jsn17293a37f145',
+      'X-RapidAPI-Host': 'the-sneaker-database.p.rapidapi.com'
+    }
+  };
+  console.log('in find')
+  
+  try {
+    axios.request(options).then(function (response) {
+      return res.status(200).json(response.data);
+    }).catch(function (error) {
+      console.error(error);
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -109,6 +134,7 @@ module.exports = {
   getProducts,
   getProductById,
   getProductByURL,
+  findProduct,
   createProduct,
   updateProductById,
   deleteProductById,

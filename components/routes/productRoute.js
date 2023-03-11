@@ -4,6 +4,7 @@ const productController = require("../controllers/productController");
 
 // define routes
 router.get("/", productController.getProducts);
+router.get("/find", productController.findProduct);
 router.get("/:id", productController.getProductById);
 router.get("/urlKey/:urlKey", productController.getProductByURL);
 router.post("/", productController.createProduct);
