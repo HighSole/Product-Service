@@ -7,9 +7,8 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
+
 const connectDB = require("./config/database");
-
-
 connectDB();
 
 // Middleware

@@ -3,64 +3,29 @@ require('mongoose-type-url');
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    name: { type: String, required: true },
+    brand: { type: String, required: true },
+    make: { type: String },
+    gender: { 
       type: String,
-      required: true,
-    },
-    brand: {
-      type: String,
-      required: true,
-    },
-    make: {
-      type: String,
-    },
-    gender: {
-      type: String,
-      enum: ["Men", "Women", "Youth", "Infants"],
-      default: "Men",
+      enum: ["men", "women", "youth", "preschool", "infant"],
+      default: "men",
     },
     image: {
-      thumbnail: {
-        type: mongoose.SchemaTypes.Url,
-      },
-      original: {
-        type: mongoose.SchemaTypes.Url,
-      },
-      small: {
-        type: mongoose.SchemaTypes.Url,
-      },
+      thumbnail: { type: mongoose.SchemaTypes.Url },
+      original: { type: mongoose.SchemaTypes.Url },
+      small: { type: mongoose.SchemaTypes.Url },
     },
-    description: {
-      type: String,
-    },
-    SKU: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    colorway: {
-      type: String,
-      required: true,
-    },
-    retailPrice: {
-      type: Number,
-    },
-    releaseDate: {
-      type: Date,
-    },
-    urlKey: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    count: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    lowestPrice: {
-      type: Number,
-    },
+    silhouette: { type: String },
+    story: { type: String },
+    sku: { type: String, required: true, unique: true },
+    colorway: { type: String, required: true },
+    retailPrice: { type: Number },
+    releaseDate: { type: Date },
+    releaseYear: { type: Number, min: 1900, max: 9999 },
+    urlKey: { type: String, unique: true, required: true },
+    inventory: { type: Number, required: true, default: 0, min: 0 },
+    lowestPrice: { type: Number, min: 0},
   },
   { timestamps: true }
 );
