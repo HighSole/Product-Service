@@ -5,4 +5,3 @@ steps:
   args: ['push', 'gcr.io/$PROJECT_ID/product-service:$COMMIT_SHA']
 images:
 - 'gcr.io/$PROJECT_ID/product-service:$COMMIT_SHA'
-logsBucket: gs://my-build-logs-bucket
