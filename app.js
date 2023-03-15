@@ -18,11 +18,9 @@ app.use(helmet());
 app.use(morgan("combined"));
 
 // Routes
+app.use('/purchase', require("./components/routes/purchaseRoute"));
 app.use("/", require("./components/routes/productRoute"));
-app.use(
-  "/:productId/variant",
-  require("./components/routes/productVariantRoute")
-);
+app.use("/:productId/variant", require("./components/routes/productVariantRoute"));
 
 // Start the server
 const PORT = process.env.PORT;

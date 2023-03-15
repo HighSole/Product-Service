@@ -60,8 +60,6 @@ const addProductVariant = async (req, res, next) => {
 
     newProductVariant.save();
 
-    await updateProductCountAndLowestPrice(res.product, count, price);
-
     res.status(201).json({ message: "Product variant added"})
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -86,22 +84,56 @@ const updateProductVariant = async (req, res, next) => {
 
     await res.productVariant.save()
 
-    await updateProductCountAndLowestPrice(res.product, count, price);
-
     res.status(200).json({ message: "Product variant updated"})
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const updateProductCountAndLowestPrice = async (product, count, price) => {
-  product.inventory += count;
-  if (price && !product.lowestPrice || product.lowestPrice > price) {
-    product.lowestPrice = price;
-  }
-  await product.save();
-};
+const updatePurchaseItems = async (req, res, next) => {
+  const { items } = req.body;
 
+  // start a session
+  const session = await mongoose.startSession();
+
+  try {
+    // start a transaction
+    await session.withTransaction(async () => {
+      // iterate through each product variant
+      for (let i = 0; i < items.length; i++) {
+        const { id, quantity } = items[i];
+
+        // find the product variant by id
+        const productVariant = await ProductVariantModel.findById(id).session(session);
+
+        // if product variant not found, rollback transaction
+        if (!productVariant) {
+          await session.abortTransaction();
+          return res.status(404).json({ message: `Product variant ${id} not found` });
+        }
+
+        // if count is negative, rollback transaction
+        if (quantity < 0) {
+          await session.abortTransaction();
+          return res.status(400).json({ message: "Count cannot be negative" });
+        }
+
+        // update product variant count
+        productVariant.count -= quantity;
+        await productVariant.save();
+
+      }
+
+      res.status(200).json({ message: "Product variants updated" });
+    });
+  } catch (error) {
+    console.log('error: ', error)
+    res.status(500).json({ message: error.message });
+  } finally {
+    // end session
+    session.endSession();
+  }
+};
 
 //MIDDLEWARES
 
@@ -130,6 +162,7 @@ module.exports = {
   getProductVariantById,
   addProductVariant,
   updateProductVariant,
+  updatePurchaseItems,
   //middleware
   findProductVariantById
 };

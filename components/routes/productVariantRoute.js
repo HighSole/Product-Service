@@ -1,4 +1,3 @@
-const express = require("express");
 const router = require('express').Router({mergeParams:true});
 const productVariantController = require("../controllers/productVariantController");
 const productController = require("../controllers/productController");
